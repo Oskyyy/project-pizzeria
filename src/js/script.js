@@ -86,6 +86,7 @@
       thisProduct.formInputs = thisProduct.form.querySelectorAll(select.all.formInputs);
       thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
+      thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
     }
 
     initAccordion(){
@@ -139,6 +140,7 @@
       const thisProduct = this;
       /* read all data from the form (using utils.serializeFormToObject) and save it to const formData */
       const formData = utils.serializeFormToObject(thisProduct.form);
+      thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
       /* set variable price to equal thisProduct.data.price */
       let price = thisProduct.data.price;
       /* START LOOP: for each paramId in thisProduct.data.params */
@@ -149,6 +151,7 @@
         for (let optionId in param.options){
           /* save the element in param.options with key optionId as const option */
           const option = param.options[optionId];
+          const Images = thisProduct.imageWrapper.querySelectorAll('.'+paramId+'-'+optionId);
           const optionSelected = formData.hasOwnProperty(paramId) && formData[paramId].indexOf(optionId) > -1;
           /* START IF: if option is selected and option is not default */
           if(optionSelected && !option.default){
@@ -160,7 +163,20 @@
           else if (!optionSelected && option.default){
             /* deduct price of option from price */
             price -= param.options[optionId].price;
+            console.log('new lower price:',price);
             /* END ELSE IF: if option is not selected and option is default */
+          }
+          if (( optionSelected && option.default) || ( optionSelected && !option.default)){
+            for (let Image of Images ){
+              Image.classList.add('active');
+              console.log('add class active');
+            }
+          }
+          else {
+            for (let Image of Images){
+              Image.classList.remove('active');
+              console.log('odebranie klasy active');
+            }
           }
           /* END LOOP: for each optionId in param.options */
         }
