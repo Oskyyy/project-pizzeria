@@ -1,6 +1,8 @@
-/* global Handlebars, dataSource */
+/* global Handlebars */
+/* eslint-disable no-undef */
+// eslint-disable-line no-unused-vars
 
-const utils = {}; // eslint-disable-line no-unused-vars
+export const utils = {};
 
 utils.createDOMFromHTML = function(htmlString) {
   let div = document.createElement('div');
