@@ -23,7 +23,7 @@ class Product{
     thisProduct.element = utils.createDOMFromHTML(generateHTML);
     const menuContainer = document.querySelector(select.containerOf.menu);
     menuContainer.appendChild(thisProduct.element);
-    const totalPrice = document.querySelector(select.menuProduct.priceElem);
+    //const totalPrice = document.querySelector(select.menuProduct.priceElem);
   }
 
   getElements(){

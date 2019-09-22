@@ -1,10 +1,9 @@
 import {select,settings} from '../settings.js';
 
-class AmountWidget{
+export class AmountWidget{
   constructor(element, startingValue){
     const thisWidget = this;
     thisWidget.getElements(element);
-    thisWidget.value = settings.amountWidget.defaultValue;
     thisWidget.value = startingValue || settings.amountWidget.defaultValue;
     thisWidget.setValue();
     thisWidget.initAction();
@@ -21,7 +20,7 @@ class AmountWidget{
   setValue(value){
     const thisWidget = this;
     const newValue = parseInt(value);
-    if ( value >= settings.amountWidget.defaultMin && value <= settings.amountWidget.defaultMax ){
+    if ( (value >= settings.amountWidget.defaultMin) && (value <= settings.amountWidget.defaultMax) && (thisWidget.value != newValue) ){
       thisWidget.value= newValue;
       thisWidget.announce();
     }

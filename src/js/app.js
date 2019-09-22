@@ -1,6 +1,7 @@
-import {settings, select} from './settings.js';
-import Product from './components/Product.js';
-import Cart from './components/Cart.js';
+/* eslint-disable no-unused-vars */
+import {settings, select, classNames} from './settings.js';
+import {Product} from './components/Product.js';
+import {Cart} from './components/Cart.js';
 import {Booking} from './components/Booking.js';
 
 const app = {
