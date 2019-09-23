@@ -1,14 +1,17 @@
 /* eslint-disable no-unused-vars */
 import {select,templates} from '../settings.js';
 import {utils} from '../utils.js';
-import { AmountWidget } from '../AmountWidget.js';
+import {AmountWidget} from './AmountWidget.js';
+import {DatePicker} from './DatePicker.js';
+import {HourPicker} from './HourPicker.js';
 
 
 export class Booking{
-  constructor(widgetContener){
+  constructor(bookingContainer){
     const thisBooking = this;
 
-    thisBooking.render(widgetContener);
+    thisBooking.bookingContainer= bookingContainer;
+    thisBooking.render(bookingContainer);
     thisBooking.initWidges();
 
   }
@@ -17,17 +20,19 @@ export class Booking{
     const generatedHTML = templates.bookingWidget();
 
     thisBooking.dom ={};
-    thisBooking.dom.wrapper = utils.createDOMFromHTML(generatedHTML);
-    console.log('wrapper',thisBooking.dom.wrapper);
+    thisBooking.dom.wrapper = thisBooking.bookingContainer;
+    thisBooking.dom.wrapper.innerHTML = generatedHTML;
     thisBooking.dom.peopleAmount = thisBooking.dom.wrapper.querySelector(select.booking.peopleAmount);
     thisBooking.dom.hoursAmount = thisBooking.dom.wrapper.querySelector(select.booking.hoursAmount);
-    thisBooking.hoursAmount = thisBooking.dom.hoursAmount.innerHTML;
-    thisBooking.peopleAmount = thisBooking.dom.peopleAmount.innerHTML;
+    thisBooking.dom.datePicker = thisBooking.dom.wrapper.querySelector(select.widgets.datePicker.wrapper);
+    thisBooking.dom.hourPicker= thisBooking.dom.wrapper.querySelector(select.widgets.hourPicker.wrapper);
   }
 
   initWidges(){
     const thisBooking = this;
     thisBooking.peopleAmount = new AmountWidget(thisBooking.dom.peopleAmount);
     thisBooking.hoursAmount = new AmountWidget(thisBooking.dom.hoursAmount);
+    thisBooking.datePicker = new DatePicker(thisBooking.dom.datePicker);
+    thisBooking.hourPicker= new HourPicker(thisBooking.dom.hourPicker);
   }
 }
