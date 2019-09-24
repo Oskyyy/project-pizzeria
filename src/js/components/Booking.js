@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import {select,templates} from '../settings.js';
+import {select,templates, settings} from '../settings.js';
 import {utils} from '../utils.js';
 import {AmountWidget} from './AmountWidget.js';
 import {DatePicker} from './DatePicker.js';
@@ -13,8 +13,58 @@ export class Booking{
     thisBooking.bookingContainer= bookingContainer;
     thisBooking.render(bookingContainer);
     thisBooking.initWidges();
+    thisBooking.getData();
 
   }
+
+  getData(){
+    const thisBooking = this;
+
+    const startEndDates = {};
+    startEndDates[settings.db.dateStartParamKey] = utils.dateToStr(thisBooking.datePicker.minDate);
+    startEndDates[settings.db.dateEndParamKey] = utils.dateToStr(thisBooking.datePicker.maxDate);
+
+    const endDate = {};
+    endDate[settings.db.dateEndParamKey] = startEndDates[settings.db.dateEndParamKey];
+
+    const params = {
+      booking: utils.queryParams(startEndDates),
+      eventsCurrent: settings.db.notRepeatParam + '&' + utils.queryParams(startEndDates),
+      eventsRepeat: settings.db.repeatParam + '&' + utils.queryParams(endDate),
+    };
+
+    const urls = {
+      booking:       settings.db.url + '/' + settings.db.booking + '?' + params.booking.join('&'),
+      eventsCurrent: settings.db.url + '/' + settings.db.event   + '?' + params.eventsCurrent.join('&'),
+      eventRepeat:   settings.db.url + '/' + settings.db.event   + '?' + params.eventRepeat.join('&'),
+    };
+
+    Promise.all([
+      fetch(urls.booking),
+      fetch(urls.eventsCurrent),
+      fetch(urls.eventsRepeat),
+    ])
+      .then(function([bookingsResponse, eventsCurrentResponse, eventsRepeatResponse]){
+        return Promise.all([
+          bookingsResponse.json(),
+          eventsCurrentResponse.json(),
+          eventsRepeatResponse.json(),
+        ]);
+      })
+      .then(function([bookings, eventsCurrent, eventsRepeat]){
+        thisBooking.parseData(bookings, eventsCurrent, eventsRepeat);
+      });
+  }
+
+  parseData(bookings,eventsCurrent,eventsRepeat){
+    const thisBooking=this;
+    thisBooking.booked ={};
+    for (let element  of eventsCurrent){
+      console.log('element:',element);
+      //thisBooking.makeBooked(eventsCurrent.data);
+    }
+  }
+
   render(){
     const thisBooking = this;
     const generatedHTML = templates.bookingWidget();
