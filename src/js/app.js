@@ -22,11 +22,9 @@ const app = {
         return rawReponse.json();
       })
       .then(function(parsedResponse){
-        console.log('parsedResponse',parsedResponse);
         thisApp.data.products = parsedResponse;
         thisApp.initMenu();
       });
-    console.log('thisApp.data',JSON.stringify(thisApp.data));
   },
 
   init: function(){
