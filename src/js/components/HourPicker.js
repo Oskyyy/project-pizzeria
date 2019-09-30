@@ -24,13 +24,13 @@ export class HourPicker extends BaseWidget{
     rangeSlider.create(thisWidget.dom.input);
 
     thisWidget.dom.input.addEventListener('input',function(){
-      thisWidget.value= thisWidget.dom.input.value;
+      thisWidget.value = thisWidget.dom.input.value;
     });
   }
 
-  parseValue(Value){
+  parseValue(value){
     const thisWidget = this;
-    return utils.numberToHour(Value);
+    return utils.numberToHour(value);
   }
 
   isValid(newValue){

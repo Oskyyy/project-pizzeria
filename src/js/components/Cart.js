@@ -4,7 +4,7 @@ import {select,settings,templates} from '../settings.js';
 import {CartProduct} from '../components/CartProduct.js';
 import {utils} from '../utils.js';
 
-class Cart{
+export class Cart{
   constructor(element){
     const thisCart = this;
     thisCart.products = [];
@@ -107,5 +107,3 @@ class Cart{
       });
   }
 }
-
-export default Cart;

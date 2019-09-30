@@ -1,8 +1,8 @@
-import {select, classNames, templates} from '../settings';
+import {select, classNames, templates} from '../settings.js';
 import {utils} from '../utils.js';
 import {AmountWidget} from './AmountWidget.js';
 
-class Product{
+export class Product{
   constructor(id, data){
     const thisProduct = this;
 
@@ -142,5 +142,3 @@ class Product{
     thisProduct.element.dispatchEvent(event);
   }
 }
-
-export default Product;

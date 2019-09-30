@@ -60,6 +60,7 @@ const app = {
         return page.id == idFromHash;
       });
     }
+    thisApp.activatePage(pagesMatchingHash.leght ? pagesMatchingHash[0].id : thisApp.pages[1].id);
     for(let link of thisApp.navLinks){
       link.addEventListener('click', function(event){
         const clickedElement = this;
@@ -76,7 +77,7 @@ const app = {
       link.classList.toggle(classNames.nav.active, link.getAttribute('href') == '#' + pageId);
     }
     for (let page of thisApp.pages){
-      page.classList.toggle(classNames.pages.active, thisApp.pages[0].id == pageId);
+      page.classList.toggle(classNames.pages.active, page.id == pageId);
     }
     window.location.hash = '#/' + pageId;
   },
