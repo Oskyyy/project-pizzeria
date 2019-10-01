@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import {select,templates, settings, classNames} from '../settings.js';
+import {select, templates, settings, classNames} from '../settings.js';
 import {utils} from '../utils.js';
 import {AmountWidget} from './AmountWidget.js';
 import {DatePicker} from './DatePicker.js';
@@ -60,7 +60,7 @@ export class Booking{
     const urls = {
       booking:       settings.db.url + '/' + settings.db.booking + '?' + params.booking,
       eventsCurrent: settings.db.url + '/' + settings.db.event   + '?' + params.eventsCurrent,
-      eventRepeat:   settings.db.url + '/' + settings.db.event   + '?' + params.eventRepeat,
+      eventsRepeat:   settings.db.url + '/' + settings.db.event   + '?' + params.eventRepeat,
     };
 
     Promise.all([
