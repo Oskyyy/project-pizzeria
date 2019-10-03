@@ -47,7 +47,7 @@ export class AmountWidget extends BaseWidget{
       thisWidget.value = thisWidget.dom.input.value;
     });
 
-    thisWidget.dom.linkDecrease.addEventListener('click',function(event){
+    thisWidget.dom.linkDecrease.addEventListener('click',function(){
       event.preventDefault();
       thisWidget.value = --thisWidget.dom.input.value;
     });

@@ -92,7 +92,6 @@ export class Product{
         }
         else if (!optionSelected && option.default){
           price -= param.options[optionId].price;
-          console.log('new lower price:',price);
         }
         if (( optionSelected && option.default) || ( optionSelected && !option.default)){
           if(!thisProduct.params[paramId]){
