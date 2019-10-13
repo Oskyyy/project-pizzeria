@@ -1,7 +1,7 @@
 import {select} from '../settings.js';
-import {AmountWidget} from './AmountWidget.js';
+import AmountWidget from './AmountWidget.js';
 
-export class CartProduct{
+class CartProduct{
   constructor(menuProduct, element){
     const thisCartProduct = this;
     thisCartProduct.id = menuProduct.id;
@@ -27,11 +27,10 @@ export class CartProduct{
 
   initamountWidget(){
     const thisCartProduct = this;
-    thisCartProduct.amountWidgetElem = thisCartProduct.dom.wrapper.querySelector(select.menuProduct.amountWidget);
-    thisCartProduct.amountWidget = new AmountWidget(thisCartProduct.amountWidgetElem, thisCartProduct.amount);
-    thisCartProduct.amountWidgetElem.addEventListener('updated', function(){
+    thisCartProduct.amountWidget = new AmountWidget(thisCartProduct.dom.amountWidget);
+    thisCartProduct.dom.amountWidget.addEventListener('updated', function(){
       thisCartProduct.amount = thisCartProduct.amountWidget.value ;
-      thisCartProduct.price = (thisCartProduct.amount * thisCartProduct.priceSingle);
+      thisCartProduct.price = thisCartProduct.amount * thisCartProduct.priceSingle;
       thisCartProduct.dom.price.innerHTML = thisCartProduct.price;
     });
   }
@@ -57,7 +56,14 @@ export class CartProduct{
   }
   getData(){
     const thisCartProduct = this;
-    const product = thisCartProduct;
-    return product;
+    return {
+      id: thisCartProduct.id,
+      amount: thisCartProduct.amount,
+      price: thisCartProduct.price,
+      priceSingle: thisCartProduct.priceSingle,
+      params: thisCartProduct.params
+    };
   }
 }
+
+export default CartProduct;

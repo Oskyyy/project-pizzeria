@@ -1,17 +1,16 @@
 /* eslint-disable no-unused-vars */
 
-import {select,settings,templates} from '../settings.js';
-import {CartProduct} from '../components/CartProduct.js';
+import {select,settings,templates, classNames} from '../settings.js';
+import CartProduct from './CartProduct.js';
 import {utils} from '../utils.js';
 
-export class Cart{
+class Cart{
   constructor(element){
     const thisCart = this;
     thisCart.products = [];
     thisCart.getElements(element);
     thisCart.initActions();
-    thisCart.deliveryFee = 20;
-    thisCart.update();
+    thisCart.deliveryFee = settings.cart.defaultDeliveryFee;
   }
   getElements(element){
     const thisCart = this;
@@ -25,16 +24,19 @@ export class Cart{
       thisCart.dom[key] = thisCart.dom.wrapper.querySelectorAll(select.cart[key]);
     }
     thisCart.dom.form = thisCart.dom.wrapper.querySelector(select.cart.form);
-    thisCart.phone =  document.querySelector('[name="phone"]');
-    thisCart.address =  document.querySelector('[name="address"]');
+    thisCart.dom.phone = thisCart.dom.wrapper.querySelector(select.cart.phone);
+    thisCart.dom.address = thisCart.dom.wrapper.querySelector(select.cart.address);
   }
   initActions(){
     const thisCart = this;
     thisCart.dom.toggleTrigger.addEventListener('click', function(){
-      thisCart.dom.wrapper.classList.toggle('active');
+      thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive);
     });
-    thisCart.dom.productList.addEventListener('remove',function(e){
-      thisCart.remove(e.detail.cartProduct);
+    thisCart.dom.productList.addEventListener('updated', function() {
+      thisCart.update();
+    });
+    thisCart.dom.productList.addEventListener('remove',function(){
+      thisCart.remove(event.detail.cartProduct);
     });
     thisCart.dom.form.addEventListener('submit', function(event){
       event.preventDefault();
@@ -45,7 +47,7 @@ export class Cart{
     const thisCart = this;
     const index = thisCart.products.indexOf(cartProduct);
     cartProduct.dom.wrapper.remove();
-    const removeProduct = thisCart.products.splice(index,1);
+    thisCart.products.splice(index,1);
     thisCart.update();
   }
   add(menuProduct){
@@ -54,10 +56,7 @@ export class Cart{
     const generatedDOM = utils.createDOMFromHTML(generatedHTML);
     thisCart.dom.productList.appendChild(generatedDOM);
     thisCart.products.push(new CartProduct(menuProduct, generatedDOM));
-    this.update();
-    thisCart.dom.productList.addEventListener('updated',function(){
-      thisCart.update();
-    });
+    thisCart.update();
   }
   update(){
     const thisCart = this;
@@ -81,16 +80,15 @@ export class Cart{
     const url = settings.db.url + '/' + settings.db.order;
 
     const payload = {
-      address: thisCart.address.value,
-      totalPrice: thisCart.totalPrice,
-      phone: thisCart.phone.value,
+      address: thisCart.dom.address.value,
+      phone: thisCart.dom.phone.value,
       subtotalPrice: thisCart.subtotalPrice,
-      totalNumber: thisCart.totalNumber,
+      totalPrice: thisCart.totalPrice,
+      deliveryFee: thisCart.deliveryFee,
       products: [],
     };
     for (let product of thisCart.products){
-      product.getData();
-      payload.products.push(product);
+      payload.products.push(product.getData());
     }
     const options = {
       method: 'POST',
@@ -107,3 +105,5 @@ export class Cart{
       });
   }
 }
+
+export default Cart;
