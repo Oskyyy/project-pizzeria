@@ -1,4 +1,4 @@
-export class BaseWidget{
+class BaseWidget{
   constructor(wrapperElement, initialValue){
     const thisWidget = this;
     thisWidget.dom = {};
@@ -11,9 +11,9 @@ export class BaseWidget{
     return thisWidget.correctValue;
   }
 
-  set value(assingendValue){
+  set value(value){
     const thisWidget = this;
-    const newValue = thisWidget.parseValue(assingendValue);
+    const newValue = thisWidget.parseValue(value);
     if (newValue != thisWidget.correctValue && thisWidget.isValid(newValue)){
       thisWidget.correctValue= newValue;
       thisWidget.announce();
@@ -21,12 +21,17 @@ export class BaseWidget{
     thisWidget.renderValue();
   }
 
-  parseValue(newValue){
-    return parseInt(newValue);
+  setValue(value) {
+    const thisWidget = this;
+    thisWidget.value = value;
   }
 
-  isValid(newValue){
-    return !isNaN(newValue);
+  parseValue(value){
+    return parseInt(value);
+  }
+
+  isValid(value){
+    return !isNaN(value);
   }
 
   renderValue(){
@@ -42,3 +47,5 @@ export class BaseWidget{
     thisWidget.dom.wrapper.dispatchEvent(event);
   }
 }
+
+export default BaseWidget;

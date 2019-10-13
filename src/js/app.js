@@ -48,30 +48,32 @@ const app = {
     });
   },
 
-  initPages(){
+  initPages: function(){
     const thisApp = this;
-    thisApp.pages = Array.from(document.querySelector(select.containerOf.pages).children);
-    thisApp.navLinks = Array.from(document.querySelectorAll(select.nav.links));
+    thisApp.pages = document.querySelector(select.containerOf.pages).children;
+    thisApp.navLinks = document.querySelectorAll(select.nav.links);
 
-    let pagesMatchingHash =[];
-    if (window.location.hash.leght >2){
-      const  idFromHash = window.location.hash.replace('#/','');
-      pagesMatchingHash = thisApp.pages.filter(function(page){
-        return page.id == idFromHash;
-      });
+    const  idFromHash = window.location.hash.replace('#/','');
+    let pagesMatchingHash = thisApp.pages[0].id;
+
+    for (let page of thisApp.pages){
+      if (page.id === idFromHash) {
+        pageMatchingHash = page.id;
+        break;
+      }
     }
-    thisApp.activatePage(pagesMatchingHash.leght ? pagesMatchingHash[0].id : thisApp.pages[1].id);
+    thisApp.activatePage(pagesMatchingHash);
     for(let link of thisApp.navLinks){
       link.addEventListener('click', function(event){
         const clickedElement = this;
         event.preventDefault();
-        const pageSelector = clickedElement.getAttribute('href');
-        const pageSelectorEmpty = pageSelector.replace('#','');
-        thisApp.activatePage(pageSelectorEmpty);
+        const id = clickedElement.getAttribute('href').replace('#','');
+        thisApp.activatePage(id);
+        window.location.hash = '#/' + id;
       });
     }
   },
-  activatePage(pageId){
+  activatePage: function(pageId){
     const thisApp= this;
     for(let link of thisApp.navLinks){
       link.classList.toggle(classNames.nav.active, link.getAttribute('href') == '#' + pageId);
@@ -79,12 +81,19 @@ const app = {
     for (let page of thisApp.pages){
       page.classList.toggle(classNames.pages.active, page.id == pageId);
     }
-    window.location.hash = '#/' + pageId;
   },
 
   initBooking(){
-    const bookingContainer = document.querySelector(select.containerOf.booking);
-    new Booking(bookingContainer);
+    const thisApp = this;
+    const bookingElem = document.querySelector(select.containerOf.booking);
+    thisApp.booking = new Booking(bookingElem);
+  },
+  init: function(){
+    const thisApp = this;
+    thisApp.initPages();
+    thisApp.initData();
+    thisApp.initCart();
+    thisApp.initBooking();
   }
 };
 
