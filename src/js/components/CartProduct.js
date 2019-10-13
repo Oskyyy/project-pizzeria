@@ -1,8 +1,8 @@
-import {select} from '../settings.js';
+import { select } from '../settings.js';
 import AmountWidget from './AmountWidget.js';
 
-class CartProduct{
-  constructor(menuProduct, element){
+class CartProduct {
+  constructor(menuProduct, element) {
     const thisCartProduct = this;
     thisCartProduct.id = menuProduct.id;
     thisCartProduct.name = menuProduct.name;
@@ -11,11 +11,11 @@ class CartProduct{
     thisCartProduct.amount = menuProduct.amount;
     thisCartProduct.params = JSON.parse(JSON.stringify(menuProduct.params));
     thisCartProduct.getElements(element);
-    thisCartProduct.initamountWidget();
+    thisCartProduct.initAmountWidget();
     thisCartProduct.initActions();
   }
 
-  getElements(element){
+  getElements(element) {
     const thisCartProduct = this;
     thisCartProduct.dom = {};
     thisCartProduct.dom.wrapper = element;
@@ -25,36 +25,41 @@ class CartProduct{
     thisCartProduct.dom.remove = thisCartProduct.dom.wrapper.querySelector(select.cartProduct.remove);
   }
 
-  initamountWidget(){
+  initAmountWidget() {
     const thisCartProduct = this;
     thisCartProduct.amountWidget = new AmountWidget(thisCartProduct.dom.amountWidget);
-    thisCartProduct.dom.amountWidget.addEventListener('updated', function(){
-      thisCartProduct.amount = thisCartProduct.amountWidget.value ;
-      thisCartProduct.price = thisCartProduct.amount * thisCartProduct.priceSingle;
+    thisCartProduct.dom.amountWidget.addEventListener('updated', function() {
+      thisCartProduct.amount = thisCartProduct.amountWidget.value;
+      thisCartProduct.price = thisCartProduct.priceSingle * thisCartProduct.amount;
+
       thisCartProduct.dom.price.innerHTML = thisCartProduct.price;
     });
   }
-  remove(){
+
+  remove() {
     const thisCartProduct = this;
     const event = new CustomEvent('remove', {
       bubbles: true,
       detail: {
-        cartProduct: thisCartProduct,
-      },
+        cartProduct: thisCartProduct
+      }
     });
+
     thisCartProduct.dom.wrapper.dispatchEvent(event);
   }
-  initActions(){
+
+  initActions() {
     const thisCartProduct = this;
-    thisCartProduct.dom.edit.addEventListener('click',function(event){
+    thisCartProduct.dom.edit.addEventListener('click', function(event) {
       event.preventDefault();
     });
-    thisCartProduct.dom.remove.addEventListener('click',function(event){
+    thisCartProduct.dom.remove.addEventListener('click', function(event) {
       event.preventDefault();
       thisCartProduct.remove();
     });
   }
-  getData(){
+
+  getData() {
     const thisCartProduct = this;
     return {
       id: thisCartProduct.id,
